@@ -1,0 +1,1 @@
+This project is a datastructure with the operations of a hash.  However, the data is stored in a "compressed trie". If two keys have a common prefix, the nodes storing data for those keys will share a common ancestor.

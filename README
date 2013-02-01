@@ -1,0 +1,87 @@
+    This project is testing two different methods of solving the same problem. 
+The problem was posed to me as an interview question, and can be stated as follows:
+
+    Given a string of characters, find the first non-repeated character in the string.
+
+The two methods I'm testing are the "hash" method, and the "treap" method.
+
+The hash method consists of going through each character in the string, 
+and building up a frequency hash which records the number of occurrences of each character
+in the string, along with the first index at which the character was encountered.
+Then, after the hash is constructed, the keys of the hash are listed out, 
+giving a list of all the unique characters encountered in the string.  
+Finally, go through each character in the list of keys, and find the minimum.
+In this case, a character is defined to be "less than" another character if it
+occurs less frequently.  If two different characters occur the same number of times,
+the one with the smallest index is the minimum.
+
+The treap method is conceptually more complicated. 
+It involves a data structure called a treap, which is an amalgam of a binary search tree,
+and a priority heap.  The unique characters, along with their number of occurrences, are inserted into the treap using binary search.
+If a character already exists, then it's number of occurrences is incremented in place.
+Then, a series of order-preserving rotations are performed which bring the tree back to a priority heap.
+Here the priority ordering is defined by the same "less than" definition which was used above,
+so that by the time the last character is inserted, the least frequently occurring character, 
+with the smallest index, is at the top of the treap.
+
+What is surprising about this experiment, at least to me, was the fact that the treap method was slower.
+Both methods are linear in the number of characters in the string, as long as the size of the alphabet is constant.
+More precisely, the time complexity is O( n * lg(M) ), where M is the number of characters in the alphabet.
+However, the tree rotations involved in the treap method made the constant of proportionality about twice as large as the hash method!
+
+The following is a plot of the average amount of time ( in seconds ) vs. the number of characters in the string ( The steeper line is the treap method. ).
+
+0.0600|                                                 *    
+      |                                                      
+      |                                                      
+      |                                                      
+      |                                                      
+      |                                            *         
+      |                                                      
+      |                                                      
+      |                                       *              
+      |                                                      
+      |                                                      
+      |                                                      
+      |                                  *                   
+      |                                                      
+      |                                                      
+      |                                                      
+      |                                                      
+0.0400|                             *                        
+      |                                                      
+      |                                                      
+      |                        *                             
+      |                                                      
+      |                                                      
+      |                                                      
+      |                                                      
+      |                   *                                  
+      |                                                      
+      |                                                 *    
+      |                                            *         
+      |                                                      
+      |              *                        *              
+      |                                                      
+      |                                  *                   
+0.0200|                             *                        
+      |         *                                            
+      |                        *                             
+      |                                                      
+      |                   *                                  
+      |              *                                       
+      |    *                                                 
+      |         *                                            
+      |                                                      
+      |    *                                                 
+      |                                                      
+      |                                                      
+      |                                                      
+      |                                                      
+      |                                                      
+      |                                                      
+      |                                                      
+0.0000|--------------------------------------------------    
+      0.0000    20000     40000     60000     80000     %-6.-1f
+
+
